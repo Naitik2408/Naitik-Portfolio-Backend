@@ -19,12 +19,21 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+// Updated CORS configuration
+const corsOptions = {
+  origin: ['http://localhost:5173', 'https://your-production-frontend-domain.com'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('API is running...');
-}   );
+});
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -40,3 +49,6 @@ app.use('/api/stats', statRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Add this for Vercel deployment
+export default app;
